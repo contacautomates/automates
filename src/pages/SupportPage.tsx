@@ -202,11 +202,11 @@ export const SupportPage: React.FC<SupportPageProps> = ({ onBack }) => {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            <a href="mailto:automates.supports@gmail.com" className="contact-item-box" style={{ padding: '24px' }}>
+            <a href="mailto:contact.automates@gmail.com" className="contact-item-box" style={{ padding: '24px' }}>
               <div className="nav-icon" style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6' }}>✉</div>
               <div style={{ textAlign: 'left' }}>
                 <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 800, marginBottom: '4px' }}>SUPPORT TECHNIQUE</div>
-                <div style={{ fontSize: '16px', fontWeight: 800 }}>automates.supports@gmail.com</div>
+                <div style={{ fontSize: '16px', fontWeight: 800 }}>contact.automates@gmail.com</div>
               </div>
             </a>
             <a href="https://wa.me/237686013300" target="_blank" rel="noreferrer" className="contact-item-box" style={{ padding: '24px' }}>
