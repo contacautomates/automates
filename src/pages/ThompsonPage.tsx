@@ -13,7 +13,7 @@ export const ThompsonPage: React.FC = () => {
   const handleBuild = () => {
     try {
       setError(null);
-      const aut = buildAutomatonFromRegex(regex);
+      const aut = buildThompson(regex);
       setAutomaton(aut);
     } catch (e: any) {
       setError(e.message);

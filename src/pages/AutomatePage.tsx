@@ -11,7 +11,8 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import dagre from 'dagre';
 import { Automaton, type State } from '../core/ClosureOperations';
-import { getReachableStates, getCoReachableStates, epsilonClosure } from '../core/Operations';
+import { getReachableStates, getCoReachableStates } from '../core/StateIdentification';
+import { epsilonClosure } from '../core/EpsilonClosure';
 import { customEdgeTypes } from '../components/CustomEdges';
 
 interface AutomatePageProps {

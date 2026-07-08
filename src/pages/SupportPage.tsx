@@ -12,7 +12,7 @@ const SmallIcon = ({ path }: { path: string }) => (
 
 export const SupportPage: React.FC<SupportPageProps> = ({ onBack }) => {
   const [donationSent, setDonationSent] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', amount: '', message: '' });
+
 
   const steps = [
     { num: "01", title: "Importation", desc: "Définissez vos automates via l'interface interactive ou l'import direct de fichiers.", icon: "M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4 M17 8l-5-5-5 5 M12 3v12" },
