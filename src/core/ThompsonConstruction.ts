@@ -34,15 +34,18 @@ export function kleeneStar(a: Automaton): Automaton {
   a.initialStates.forEach(i => result.addTransition(start, EPSILON, i));
   a.finalStates.forEach(f => { result.addTransition(f, EPSILON, end); a.initialStates.forEach(i => result.addTransition(f, EPSILON, i)); });
   result.addTransition(start, EPSILON, end);
+  result.initialStates = new Set([start]);
+  result.finalStates = new Set([end]);
   return result;
 }
 
 export function buildThompson(regex: string): Automaton {
+  if (!regex || regex.trim() === '') return new Automaton();
   const postfix = toPostfix(regex);
   const stack: Automaton[] = [];
   for (const char of postfix) {
     if (char === '*') stack.push(kleeneStar(stack.pop()!));
-    else if (char === '.' || char === ' ') { const b = stack.pop()!, a = stack.pop()!; stack.push(concatenate(a, b)); }
+    else if (char === '.') { const b = stack.pop()!, a = stack.pop()!; stack.push(concatenate(a, b)); }
     else if (char === '|' || char === '+') { const b = stack.pop()!, a = stack.pop()!; stack.push(union(a, b)); }
     else stack.push(createBaseAutomaton(char));
   }
@@ -52,11 +55,17 @@ export function buildThompson(regex: string): Automaton {
 function toPostfix(regex: string): string {
   let result = "", stack: string[] = [], formatted = "";
   const precedence = (op: string) => op === '*' ? 3 : (op === '.' ? 2 : 1);
-  for (let i = 0; i < regex.length; i++) {
-    formatted += regex[i];
-    if (i + 1 < regex.length) {
-      const c1 = regex[i], c2 = regex[i+1];
-      if (/[a-z0-9\*\)]/.test(c1) && /[a-z0-9\(]/.test(c2) && !'|*+)'.includes(c2)) formatted += '.';
+  const isSymbol = (c: string) => !'()|*+.'.includes(c);
+  
+  const cleanRegex = regex.replace(/\s+/g, '');
+  
+  for (let i = 0; i < cleanRegex.length; i++) {
+    formatted += cleanRegex[i];
+    if (i + 1 < cleanRegex.length) {
+      const c1 = cleanRegex[i], c2 = cleanRegex[i+1];
+      if ((isSymbol(c1) || c1 === '*' || c1 === ')') && (isSymbol(c2) || c2 === '(')) {
+        formatted += '.';
+      }
     }
   }
   for (const char of formatted) {
