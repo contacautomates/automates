@@ -1,7 +1,10 @@
 # Les Automates
 
-Bienvenue sur l'application **Les Automates** ! 
+Bienvenue sur la plateforme **Les Automates** ! 
 Il s'agit d'un outil pédagogique et interactif de conception, d'analyse et de manipulation d'automates finis (déterministes, non-déterministes, avec et sans epsilon-transitions).
+
+**Projet Académique - Université de Yaoundé I**
+Développé au sein du Département d'Informatique, Faculté des Sciences, en tant que projet d'excellence sur la Théorie des Langages et des Automates.
 
 ## Fonctionnalités
 
@@ -38,3 +41,12 @@ npm run dev
 ```
 
 L'application sera alors accessible sur `http://localhost:5173`.
+
+## Crédits & Réalisation
+
+Ce projet a été conçu et développé dans un cadre académique :
+
+- **Conception & Code** : **N. NASAIRE** (Étudiant Licence 3 - Informatique, passionné par l'UI/UX et les solveurs mathématiques)
+- **Superviseur Académique** : **Dr KOUAKAM E.** (Docteur en Informatique, Université de Yaoundé I, Spécialiste en Algorithmique Formelle)
+
+© 2026 LES AUTOMATES - Tous droits réservés.
