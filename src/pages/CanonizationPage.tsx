@@ -4,6 +4,7 @@ import { AutomatonBuilder } from '../components/AutomatonBuilder';
 import { AutomatonViewer } from '../components/AutomatonViewer';
 import { Automaton } from '../core/ClosureOperations';
 import { canonize } from '../core/Canonization';
+import { nfaToDfa } from '../core/NFAToDFA';
 //;
 
 export const CanonizationPage: React.FC = () => {
@@ -12,13 +13,14 @@ export const CanonizationPage: React.FC = () => {
 
   const handleCanonize = () => {
     if (input) {
-      setOutput(canonize(input));
+      const dfa = nfaToDfa(input);
+      setOutput(canonize(dfa));
     }
   };
 
   return (
     <PageLayout moduleCode="MODULE C15" title="Canonisation d'Automate" 
-      description="Renommez les états de votre automate suivant une nomenclature standard (q0, q1, q2...) pour faciliter la comparaison."
+      description="Génère l'automate canonique (équivalent à l'automate minimal) où les états conservent les noms de leurs sous-états sous forme d'ensembles, par exemple {q0, q1}."
     >
       <div className="responsive-grid">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>

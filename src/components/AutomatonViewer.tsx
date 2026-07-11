@@ -70,7 +70,16 @@ export const AutomatonViewer: React.FC<AutomatonViewerProps> = ({ automaton }) =
           label: (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '2px', lineHeight: 1.1 }}>
               {isInitial && <span style={{ fontSize: '9px', letterSpacing: '1px', opacity: 0.85, fontWeight: 700 }}>▶ INIT</span>}
-              <span style={{ fontSize: '14px', fontWeight: 900 }}>{state}</span>
+              {state.split('\n').map((line, idx) => (
+                <span key={idx} style={{ 
+                  fontSize: idx === 0 ? '14px' : '10px', 
+                  fontWeight: idx === 0 ? 900 : 500,
+                  opacity: idx === 0 ? 1 : 0.8,
+                  textAlign: 'center'
+                }}>
+                  {line}
+                </span>
+              ))}
               {isFinal && <span style={{ fontSize: '9px', letterSpacing: '1px', opacity: 0.85, fontWeight: 700 }}>◎ FIN</span>}
             </div>
           )

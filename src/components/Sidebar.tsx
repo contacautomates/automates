@@ -41,7 +41,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onPageChange, them
         setMobileOpen(false);
     };
 
-    const SidebarContent = () => (
+    const sidebarContent = (
         <>
             <nav className="sidebar-nav">
                 {menuItems.map((item) => (
@@ -49,6 +49,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onPageChange, them
                         key={item.id}
                         className={`nav-item ${activePage === item.id ? 'active' : ''}`}
                         onClick={() => handleNav(item.id)}
+                        title={collapsed ? item.label : undefined}
                     >
                         <div className="nav-icon">
                             <Icon path={item.path} />
@@ -59,14 +60,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onPageChange, them
             </nav>
 
             <div className="theme-toggle-box">
-                <button className={`nav-item ${activePage === 'support' ? 'active' : ''}`} onClick={() => handleNav('support')} style={{ marginBottom: '12px' }}>
+                <button className={`nav-item ${activePage === 'support' ? 'active' : ''}`} onClick={() => handleNav('support')} style={{ marginBottom: '12px' }} title={collapsed ? 'Guide & Support' : undefined}>
                     <div className="nav-icon">
                         <Icon path="M12 22s9-4.72 9-11V5l-9-3-9 3v6c0 6.28 9 11 9 11z" />
                     </div>
                     <span>Guide & Support</span>
                 </button>
 
-                <button className="theme-btn" onClick={onToggleTheme}>
+                <button className="theme-btn" onClick={onToggleTheme} title={collapsed ? (theme === 'light' ? 'Mode Sombre' : 'Mode Claire') : undefined}>
                     {theme === 'light' ? <>🌙 Mode Sombre</> : <>☀️ Mode Claire</>}
                 </button>
             </div>
@@ -86,7 +87,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onPageChange, them
                         </svg>
                     </button>
                 </div>
-                <SidebarContent />
+                {sidebarContent}
             </aside>
 
             {/* MOBILE TOP BAR */}
@@ -113,7 +114,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, onPageChange, them
                             </div>
                             <button onClick={() => setMobileOpen(false)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '24px', lineHeight: 1 }}>✕</button>
                         </div>
-                        <SidebarContent />
+                        {sidebarContent}
                     </aside>
                 </div>
             )}

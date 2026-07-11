@@ -1,15 +1,18 @@
 import { Automaton, EPSILON } from './ClosureOperations';
 
+let stateCounter = 0;
+const nextState = () => `q${stateCounter++}`;
+
 export function createBaseAutomaton(symbol: string): Automaton {
   const a = new Automaton();
-  const q0 = "q" + Math.random().toString(36).substr(2, 5), q1 = "q" + Math.random().toString(36).substr(2, 5);
+  const q0 = nextState(), q1 = nextState();
   a.addState(q0, true, false); a.addState(q1, false, true);
   a.addTransition(q0, symbol, q1);
   return a;
 }
 
 export function union(a: Automaton, b: Automaton): Automaton {
-  const result = new Automaton(), start = "qS_" + Math.random().toString(36).substr(2, 5), end = "qE_" + Math.random().toString(36).substr(2, 5);
+  const result = new Automaton(), start = nextState(), end = nextState();
   result.addState(start, true, false); result.addState(end, false, true);
   [a, b].forEach(aut => {
     aut.states.forEach(s => result.states.add(s));
@@ -29,7 +32,7 @@ export function concatenate(a: Automaton, b: Automaton): Automaton {
 }
 
 export function kleeneStar(a: Automaton): Automaton {
-  const result = a.clone(), start = "qS_" + Math.random().toString(36).substr(2, 5), end = "qE_" + Math.random().toString(36).substr(2, 5);
+  const result = a.clone(), start = nextState(), end = nextState();
   result.addState(start, true, false); result.addState(end, false, true);
   a.initialStates.forEach(i => result.addTransition(start, EPSILON, i));
   a.finalStates.forEach(f => { result.addTransition(f, EPSILON, end); a.initialStates.forEach(i => result.addTransition(f, EPSILON, i)); });
@@ -40,6 +43,7 @@ export function kleeneStar(a: Automaton): Automaton {
 }
 
 export function buildThompson(regex: string): Automaton {
+  stateCounter = 0;
   if (!regex || regex.trim() === '') return new Automaton();
   const postfix = toPostfix(regex);
   const stack: Automaton[] = [];
@@ -54,7 +58,7 @@ export function buildThompson(regex: string): Automaton {
 
 function toPostfix(regex: string): string {
   let result = "", stack: string[] = [], formatted = "";
-  const precedence = (op: string) => op === '*' ? 3 : (op === '.' ? 2 : 1);
+  const precedence = (op: string) => op === '*' ? 3 : (op === '.' ? 2 : (op === '|' || op === '+' ? 1 : 0));
   const isSymbol = (c: string) => !'()|*+.'.includes(c);
   
   const cleanRegex = regex.replace(/\s+/g, '');
@@ -70,8 +74,14 @@ function toPostfix(regex: string): string {
   }
   for (const char of formatted) {
     if (char === '(') stack.push(char);
-    else if (char === ')') { while (stack.length && stack[stack.length-1] !== '(') result += stack.pop(); stack.pop(); }
-    else if ('*|.+'.includes(char)) { while (stack.length && precedence(stack[stack.length-1]) >= precedence(char)) result += stack.pop(); stack.push(char); }
+    else if (char === ')') { 
+      while (stack.length && stack[stack.length-1] !== '(') result += stack.pop(); 
+      stack.pop(); 
+    }
+    else if ('*|.+'.includes(char)) { 
+      while (stack.length && stack[stack.length-1] !== '(' && precedence(stack[stack.length-1]) >= precedence(char)) result += stack.pop(); 
+      stack.push(char); 
+    }
     else result += char;
   }
   while (stack.length) result += stack.pop();

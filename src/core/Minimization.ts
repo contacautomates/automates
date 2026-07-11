@@ -23,11 +23,32 @@ export function minimizeDFA(dfa: Automaton): Automaton {
     }
     partitions = nextPartitions;
   }
-  const result = new Automaton(), getRep = (s: State) => Array.from(partitions.find(p => p.has(s)) || [])[0];
-  partitions.forEach(group => { const rep = Array.from(group)[0]; result.addState(rep, Array.from(group).some(s => dfa.initialStates.has(s)), dfa.finalStates.has(rep)); });
-  partitions.forEach(group => { const rep = Array.from(group)[0]; dfa.alphabet.forEach(sym => {
-    const target = Array.from(dfa.transitions.get(rep)?.get(sym) || [])[0];
-    if (target) result.addTransition(rep, sym, getRep(target));
-  }); });
+  const stateMapping = new Map<Set<State>, string>();
+  partitions.forEach((group, index) => {
+    const statesList = Array.from(group).sort().join(',');
+    stateMapping.set(group, `p${index + 1}\n{${statesList}}`);
+  });
+
+  const result = new Automaton();
+  const getPName = (s: State) => {
+    const p = partitions.find(p => p.has(s));
+    return p ? stateMapping.get(p)! : s;
+  };
+
+  partitions.forEach(group => { 
+    const pName = stateMapping.get(group)!;
+    const isInit = Array.from(group).some(s => dfa.initialStates.has(s));
+    const isFin = Array.from(group).some(s => dfa.finalStates.has(s));
+    result.addState(pName, isInit, isFin); 
+  });
+
+  partitions.forEach(group => { 
+    const rep = Array.from(group)[0]; 
+    const pName = stateMapping.get(group)!;
+    dfa.alphabet.forEach(sym => {
+      const target = Array.from(dfa.transitions.get(rep)?.get(sym) || [])[0];
+      if (target) result.addTransition(pName, sym, getPName(target));
+    }); 
+  });
   return result;
 }
