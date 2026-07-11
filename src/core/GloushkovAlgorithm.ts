@@ -86,7 +86,7 @@ export function buildGloushkov(regex: string): Automaton {
     const startState = "q0";
     automaton.addState(startState, true, root.nullable);
 
-    for (const [pos, sym] of positionsMap.entries()) {
+    for (const pos of positionsMap.keys()) {
         const stateName = `q${pos}`;
         const isFinal = root.lastpos.has(pos);
         automaton.addState(stateName, false, isFinal);
@@ -98,7 +98,7 @@ export function buildGloushkov(regex: string): Automaton {
         automaton.addTransition(startState, sym, targetState);
     }
 
-    for (const [pos, sym] of positionsMap.entries()) {
+    for (const pos of positionsMap.keys()) {
         const sourceState = `q${pos}`;
         const follows = followpos.get(pos) || new Set();
         for (const targetPos of follows) {
